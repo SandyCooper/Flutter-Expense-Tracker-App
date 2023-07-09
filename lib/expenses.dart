@@ -77,6 +77,7 @@ class _ExpensesState extends State<Expenses> {
     }
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: const Text("Flutter Expense Tracker"),
         actions: [
           IconButton(
@@ -89,7 +90,11 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text("Chart Area"),
           Expanded(
-            child: mainContent,
+            child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                ),
+                child: mainContent),
           ),
         ],
       ),
