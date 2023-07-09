@@ -43,8 +43,38 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void removeExistingExpense(Expense expense) {
+    final registeredExpenseIndex = registeredExpenses.indexOf(expense);
+    setState(() {
+      registeredExpenses.remove(expense);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text("Item Deleted"),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            setState(() {
+              registeredExpenses.insert(registeredExpenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(context) {
+    Widget mainContent = const Center(
+      child: Text("No item listed. Add some expense to track"),
+    );
+    if (registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: registeredExpenses,
+        onRemoveExpense: removeExistingExpense,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Flutter Expense Tracker"),
@@ -59,9 +89,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text("Chart Area"),
           Expanded(
-            child: ExpensesList(
-              expenses: registeredExpenses,
-            ),
+            child: mainContent,
           ),
         ],
       ),
